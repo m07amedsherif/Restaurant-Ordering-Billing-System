@@ -119,3 +119,7 @@ Used Desing Patterns:
 
 ---
 
+You can view the UML diagram for the **Menu system**, including the `Menu` and `MenuItem` interfaces, `BaseMenuItem`, `AddOn`, concrete menu item classes, the three `Menu` types, and the `MenuFactory` with its concrete factories, at the following link:
+[View UML Diagram on Lucidchart](https://lucid.app/lucidchart/39cbdda2-25a4-4ee2-919a-4cc08959a061/edit?viewport_loc=578%2C400%2C2679%2C1257%2CHWEp-vi-RSFO&invitationId=inv_73f2e44e-9f9f-41ba-a969-71b89c80702c).
+
+
