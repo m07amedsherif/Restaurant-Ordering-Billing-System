@@ -56,5 +56,10 @@ The system will process the order, apply the discount, notify the kitchen and wa
 
 The system will process the takeaway order, package it, and generate a receipt.
 
+## UML Diagrams
+
+*   **Menu System UML:** [View on Lucidchart](https://lucid.app/lucidchart/39cbdda2-25a4-4ee2-919a-4cc08959a061/edit?viewport_loc=578%2C400%2C2679%2C1257%2CHWEp-vi-RSFO&invitationId=inv_73f2e44e-9f9f-41ba-a969-71b89c80702c) - Includes the Menu and MenuItem interfaces, BaseMenuItem, AddOn, concrete menu item classes, the three Menu types, and the MenuFactory with its concrete factories.
+*   **Full Project UML:** [View on Mermaid Chart](https://www.mermaidchart.com/d/b98fda79-ab07-4676-9e26-58dfc3335d00) - Comprehensive diagram covering all implemented patterns and classes.
+
 
 
