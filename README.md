@@ -31,30 +31,71 @@ This project implements the following design patterns to ensure a clean, modular
 
 ---
 
-### Example Scenarios
+### Test Cases
 
-#### 1. Ordering a Customized Pizza with a Discount
+Here are manual test cases to verify the system's functionality.
 
-1.  Run the application.
-2.  Select the **Non-Vegetarian** menu.
-3.  Choose an **Eastern Pizza**.
-4.  Add **Extra Cheese** and **Sauce** as add-ons.
-5.  Select the **10% off Pizza** discount.
-6.  Choose **Dine-In** as the order type.
-7.  Select **Credit Card** as the payment method.
+#### Test Case 1: Vegetarian Pizza with Discount (Dine-In)
+**Objective:** Verify ordering a pizza, adding toppings, applying a category discount, and paying with a credit card.
 
-The system will process the order, apply the discount, notify the kitchen and waiter, and generate a receipt.
+| Step | Input | Action | Expected Output |
+| :--- | :--- | :--- | :--- |
+| 1 | `1` | Select **Vegetarian** Menu | Displays Vegetarian Menu items. |
+| 2 | `2` | Select **Italian Pizza** ($9.50) | Shows "Italian Pizza" selected. |
+| 3 | `1` | Add **Extra Cheese** (+$0.75) | Item updates to "Italian Pizza + Extra Cheese". |
+| 4 | `6` | Finish adding add-ons | Proceed to discount selection. |
+| 5 | `2` | Select **10% off Pizza** | Discount strategy selected. |
+| 6 | `1` | Select **Dine-In** | Order type set to Dine-In. |
+| 7 | `2` | Select **Credit Card** | Prompt for card number. |
+| 8 | `1234` | Enter Card Number | Payment processed. |
 
-#### 2. Ordering a Kids Meal for Takeaway
+**Expected Receipt Output:**
+*   **Item:** Italian Pizza + Extra Cheese
+*   **Subtotal:** $10.25 ($9.50 + $0.75)
+*   **Discount:** -$0.95 (10% of $9.50 base pizza price) *Note: Discount logic depends on implementation details, usually applies to base item price if category matches.*
+*   **Tax:** +$1.44 (14% of subtotal)
+*   **Total:** Final calculation based on subtotal - discount + tax.
+*   **Notifications:** Console shows Kitchen receiving order and Waiter assigned.
 
-1.  Run the application.
-2.  Select the **Kids** menu.
-3.  Choose a **Kids Burger**.
-4.  Select **No Discount**.
-5.  Choose **Takeaway** as the order type.
-6.  Select **Cash** as the payment method.
+#### Test Case 2: Kids Meal Takeaway (No Discount)
+**Objective:** Verify ordering a kids meal, no add-ons, no discount, takeaway packaging, and cash payment.
 
-The system will process the takeaway order, package it, and generate a receipt.
+| Step | Input | Action | Expected Output |
+| :--- | :--- | :--- | :--- |
+| 1 | `3` | Select **Kids** Menu | Displays Kids Menu items. |
+| 2 | `1` | Select **Kids Nuggets** ($4.00) | Shows "Kids Nuggets" selected. |
+| 3 | `6` | No add-ons | Proceed to discount selection. |
+| 4 | `1` | Select **No Discount** | No discount applied. |
+| 5 | `3` | Select **Takeaway** | Order type set to Takeaway. |
+| 6 | `1` | Select **Cash** | Payment processed. |
+
+**Expected Receipt Output:**
+*   **Item:** Kids Nuggets
+*   **Subtotal:** $4.00
+*   **Discount:** $0.00
+*   **Tax:** +$0.56 (14% of $4.00)
+*   **Total:** $4.56
+*   **Special Handling:** Console shows "Packaging order... for takeaway".
+
+---
+
+### Discount Scenarios
+
+The system uses the **Strategy Pattern** to apply discounts. Currently implemented strategies include:
+
+1.  **No Discount:**
+    *   **Logic:** Returns a discount amount of $0.00.
+    *   **Use Case:** Standard orders with no promotions.
+
+2.  **Item Category Discount (e.g., 10% off Pizza):**
+    *   **Logic:** Iterates through ordered items. If an item's category matches "Pizza", 10% of that item's price is added to the total discount.
+    *   **Example:**
+        *   Order: Italian Pizza ($9.50) + Burger ($7.00).
+        *   Discount Strategy: 10% off Pizza.
+        *   Calculation: 10% of $9.50 = $0.95. Burger is ignored.
+        *   Total Discount: $0.95.
+
+*Note: The system is designed to easily add new strategies (e.g., "Flat $5 off", "Free Drink with Burger") by implementing the `DiscountStrategy` interface.*
 
 ## UML Diagrams
 
