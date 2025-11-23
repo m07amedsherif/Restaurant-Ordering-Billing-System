@@ -1,12 +1,20 @@
-public interface Subject {
-    void register(Observer o);
-    void unregister(Observer o);
-    void notifyObservers(Order order);
-}
+import java.util.ArrayList;
+import java.util.List;
 
-class OrderNotifier implements Subject {
-    private final java.util.List<Observer> observers = new java.util.ArrayList<>();
-    @Override public void register(Observer o){ observers.add(o); }
-    @Override public void unregister(Observer o){ observers.remove(o); }
-    @Override public void notifyObservers(Order order){ for (Observer o : observers) o.update(order); }
+public abstract class Subject {
+    private final List<Observer> observers = new ArrayList<>();
+
+    public void register(Observer o) {
+        observers.add(o);
+    }
+
+    public void unregister(Observer o) {
+        observers.remove(o);
+    }
+
+    public void notifyObservers(Order order) {
+        for (Observer o : observers) {
+            o.update(order);
+        }
+    }
 }

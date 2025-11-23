@@ -1,25 +1,46 @@
-public class OrderProcessor {
-    private final OrderNotifier notifier;
-    private final java.util.List<Discount> discounts = new java.util.ArrayList<>();
-    private Payment paymentStrategy;
+public abstract class OrderProcessor {
 
-    public OrderProcessor(OrderNotifier notifier){ this.notifier = notifier; }
-    public void addDiscount(Discount d){ discounts.add(d); }
-    public void setPaymentStrategy(Payment p){ this.paymentStrategy = p; }
+    // Template method
+    public final void process(Order order) {
+        // Step 1: Calculate costs
+        calculateTotals(order);
 
-    public void process(Order order){
-        double subtotal = order.subTotal();
-        double discount = 0.0; for (Discount d : discounts) discount += d.applyDiscount(order);
-        double taxable = Math.max(0, subtotal - discount);
-        double tax = taxable * order.getTaxRate();
-        double total = taxable + tax;
+        // Step 2: Apply order-specific actions
+        handleSpecialRequirements(order);
 
-        notifier.notifyObservers(order);
+        // Step 3: Process payment
+        processPayment(order);
 
-        boolean paid = false;
-        if (paymentStrategy != null) paid = paymentStrategy.pay(total);
-        else System.out.println("No payment method set. Skipping payment.");
+        // Step 4: Generate receipt
+        generateReceipt(order);
 
-        ReceiptPrinter.printReceipt(order, subtotal, tax, discount, total, paymentStrategy==null?"UNPAID":paymentStrategy.getName());
+        // Step 5: Notify observers
+        notifySystems(order);
+    }
+
+    protected void calculateTotals(Order order) {
+        System.out.printf("Subtotal: $%.2f%n", order.subTotal());
+        System.out.printf("Discount: -$%.2f%n", order.getDiscount());
+        System.out.printf("Tax: +$%.2f%n", order.subTotal() * order.getTaxRate());
+        System.out.printf("Total: $%.2f%n", order.getTotal());
+    }
+
+    // This is a "hook" method that can be overridden by subclasses
+    protected void handleSpecialRequirements(Order order) {
+        // No special requirements by default
+    }
+
+    protected void processPayment(Order order) {
+        // Default payment processing
+        System.out.println("Processing payment...");
+        // In a real system, this would interact with a payment gateway
+    }
+
+    protected void generateReceipt(Order order) {
+        ReceiptPrinter.printReceipt(order);
+    }
+
+    protected void notifySystems(Order order) {
+        order.placeOrder();
     }
 }

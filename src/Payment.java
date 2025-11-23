@@ -1,33 +1,42 @@
-public interface Payment {
-    boolean pay(double amount);
-    String getName();
-}
+public class Payment {
+    private PaymentStrategy paymentStrategy;
 
-class CashPayment implements Payment {
-    @Override public boolean pay(double amount){
-        System.out.println("Processing cash payment: $" + String.format("%.2f", amount));
-        return true;
+    public void setPaymentStrategy(PaymentStrategy paymentStrategy) {
+        this.paymentStrategy = paymentStrategy;
     }
-    @Override public String getName(){ return "Cash"; }
+
+    public void pay(double amount) {
+        if (paymentStrategy == null) {
+            System.out.println("Payment strategy not set.");
+            return;
+        }
+        paymentStrategy.pay(amount);
+    }
 }
 
-class CardPayment implements Payment {
+interface PaymentStrategy {
+    void pay(double amount);
+}
+
+class CashPayment implements PaymentStrategy {
+    @Override public void pay(double amount){
+        System.out.println("Processing cash payment: $" + String.format("%.2f", amount));
+    }
+}
+
+class CardPayment implements PaymentStrategy {
     private final String cardNumber;
     public CardPayment(String cardNumber){ this.cardNumber = cardNumber; }
-    @Override public boolean pay(double amount){
+    @Override public void pay(double amount){
         System.out.println("Charging card " + mask(cardNumber) + " for $" + String.format("%.2f", amount));
-        return true;
     }
     private String mask(String c){ if (c==null) return "****"; int n=c.length(); return "****" + c.substring(Math.max(0,n-4)); }
-    @Override public String getName(){ return "Card"; }
 }
 
-class MobileWalletPayment implements Payment {
+class MobileWalletPayment implements PaymentStrategy {
     private final String walletId;
     public MobileWalletPayment(String walletId){ this.walletId = walletId; }
-    @Override public boolean pay(double amount){
+    @Override public void pay(double amount){
         System.out.println("Charging mobile wallet " + walletId + " for $" + String.format("%.2f", amount));
-        return true;
     }
-    @Override public String getName(){ return "Mobile Wallet"; }
 }
